@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    class SpeiPayment:PaymentMethod
+    public class SpeiPayment:PaymentMethod
     {
         public String clabe;
         public String tracking_code;

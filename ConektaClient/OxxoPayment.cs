@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    class OxxoPayment : PaymentMethod
+    public class OxxoPayment : PaymentMethod
     {
         public String barcode;
         public String barcode_url;

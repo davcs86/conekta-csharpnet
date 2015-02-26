@@ -63,56 +63,31 @@ namespace ConektaCSharp
         }
 
         public static Charge create(JObject _params){
-            try { 
-                //String className = Charge.class.getCanonicalName();
-                return (Charge) scpCreate("charge", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Charge) scpCreate("charge", _params);
         }
 
         public Charge capture() {
-            try { 
-                return (Charge) customAction("POST", "capture", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Charge) customAction("POST", "capture", null);
         }
 
         public Charge refund(int amount){
-            try { 
-                JObject _params;
-                try {
-                    _params = JObject.Parse("{'amount':" + amount + "}");
-                } catch(Exception e) {
-                    throw new Error(e.ToString());
-                }
-                return (Charge) customAction("POST", "refund", _params);
+            JObject _params;
+            try {
+                _params = JObject.Parse("{'amount':" + amount + "}");
+            } catch(Exception e) {
+                throw new Error(e.ToString());
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
-            }
+            return (Charge) customAction("POST", "refund", _params);
         }
 
         public Charge refund(){
-            try{
-                JObject _params;
-                try {
-                    _params = JObject.Parse("{'amount':" + amount + "}");
-                } catch(Exception e) {
-                    throw new Error(e.ToString());
-                }
-                return (Charge) customAction("POST", "refund", _params);
+            JObject _params;
+            try {
+                _params = JObject.Parse("{'amount':" + amount + "}");
+            } catch(Exception e) {
+                throw new Error(e.ToString());
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
-            }
+            return (Charge) customAction("POST", "refund", _params);
         }
     }
 }

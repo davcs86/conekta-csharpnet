@@ -27,7 +27,7 @@ namespace ConektaCSharp
             return message;
         }
 
-        public static void errorHandler(JObject response, int responseCode) {
+        public static void errorHandler(JObject response, int responseCode=0) {
             String message = null;
             String type = null;
             String __params = null;
@@ -67,37 +67,43 @@ namespace ConektaCSharp
             }
         }
     }
-    class ApiError : Error {
+    public class ApiError : Error {
 
         public ApiError(String message, String type, int code, String _params) :base(message, type, code, _params){}
     }
 
-    class NoConnectionError : Error {
+    public class NoConnectionError : Error
+    {
 
         public NoConnectionError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }
 
-    class AuthenticationError : Error {
+    public class AuthenticationError : Error
+    {
 
         public AuthenticationError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }
 
-    class ParameterValidationError : Error {
+    public class ParameterValidationError : Error
+    {
 
         public ParameterValidationError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }
 
-    class ProcessingError : Error {
+    public class ProcessingError : Error
+    {
 
         public ProcessingError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }
 
-    class ResourceNotFoundError : Error {
+    public class ResourceNotFoundError : Error
+    {
 
         public ResourceNotFoundError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }
 
-    class MalformedRequestError : Error {
+    public class MalformedRequestError : Error
+    {
 
         public MalformedRequestError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
     }

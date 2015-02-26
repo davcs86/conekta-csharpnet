@@ -73,104 +73,97 @@ namespace ConektaCSharp
 
         public Object Request(String method, String url, JObject _params) 
         {
-            try { 
-                try {
-                    String apiURL = ApiUrl(url);
+            try {
+                String apiURL = ApiUrl(url);
 
-                    X509Certificate x509certificate = new X509Certificate();
-                    x509certificate.Import(Certificate.ca_bundle);
+                X509Certificate x509certificate = new X509Certificate();
+                x509certificate.Import(Certificate.ca_bundle);
 
-                    ServicePointManager.Expect100Continue = true;
+                ServicePointManager.Expect100Continue = true;
 
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
-                    Connection = (HttpWebRequest)WebRequest.Create(apiURL);
+                Connection = (HttpWebRequest)WebRequest.Create(apiURL);
 
-                    Connection.Method = method;
-                    Connection.ClientCertificates.Add(x509certificate);
-                    Connection.Timeout = 60000;
-                    Connection.ReadWriteTimeout = 60000;
-                    Connection.PreAuthenticate = true;
+                Connection.Method = method;
+                Connection.ClientCertificates.Add(x509certificate);
+                Connection.Timeout = 60000;
+                Connection.ReadWriteTimeout = 60000;
+                Connection.PreAuthenticate = true;
 
-                    SetHeaders();
-                }
-                catch (Exception e)
-                {
-                    throw new Error(e.ToString());
-                }
-                if (_params != null) {
-                    Stream os = null;
-                    try {
-                        os = Connection.GetRequestStream();
-                    } catch (Exception e) {
-                        throw new Error("Could not connect to " + Conekta.ApiBase + " (" + e.ToString() + ").");
-                    }
-                    try {
-                        String r = getQuery(_params, null);
-                        var documentBytes = Encoding.UTF8.GetBytes(r);
-                        os.Write(documentBytes, 0, documentBytes.Length);
-                        os.Flush();
-                        os.Close();
-                    } catch (Exception e) {
-                        throw new Error(e.ToString());
-                    }
-
-                }
-                HttpStatusCode responseCode;
-                HttpWebResponse response;
-                try
-                {
-                    response = (HttpWebResponse) Connection.GetResponse();
-                    responseCode = response.StatusCode;
-
-                } catch (Exception e) {
-                    throw new Error(e.ToString());
-                }
-            
-                StreamReader instr = null;
-                Stream receiveStream = null;
-                String inputLine;
-                StringBuilder responseStr = new StringBuilder();
-                Object obj = null;
-                try {
-                    receiveStream = response.GetResponseStream();
-                    instr = new StreamReader(receiveStream, Encoding.UTF8);
-                    while ((inputLine = instr.ReadLine()) != null) {
-                        responseStr.Append(inputLine);
-                    }
-                    instr.Close();
-                    switch ((int)responseStr.ToString()[0])
-                    {
-                        // {
-                        case 123:
-                            obj = JObject.Parse(responseStr.ToString());
-                            break;
-                        // [
-                        case 91:
-                            obj = JArray.Parse(responseStr.ToString());//JArray
-                            break;
-                        default:
-                            throw new Error("invalid response: " + responseStr.ToString());
-                        // Other
-                    }
-                    if (responseCode != HttpStatusCode.OK) {
-                        Error.errorHandler((JObject) obj, int.Parse(responseCode.ToString()));
-                    }
-                } catch (Exception e) {
-                    JObject error = null;
-                    try {
-                        error = new JObject("{'message':'" + HttpUtility.UrlEncode(e.ToString(), Encoding.UTF8) + "'}");
-                    } catch (Exception ex) {
-                        throw new Error(ex.ToString());
-                    }
-                    Error.errorHandler(error, int.Parse(responseCode.ToString()));
-                }
-                return obj;
+                SetHeaders();
             }
-            catch (Exception exx)
+            catch (Exception e)
             {
-                throw new Error(exx.ToString());
+                throw new Error(e.ToString());
             }
+            if (_params != null) {
+                Stream os = null;
+                try {
+                    os = Connection.GetRequestStream();
+                } catch (Exception e) {
+                    throw new Error("Could not connect to " + Conekta.ApiBase + " (" + e.ToString() + ").");
+                }
+                try {
+                    String r = getQuery(_params, null);
+                    var documentBytes = Encoding.UTF8.GetBytes(r);
+                    os.Write(documentBytes, 0, documentBytes.Length);
+                    os.Flush();
+                    os.Close();
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+            }
+            HttpStatusCode responseCode = HttpStatusCode.OK;
+            HttpWebResponse response;
+            Object obj = null;
+            StreamReader instr = null;
+            Stream receiveStream = null;
+            String inputLine;
+            StringBuilder responseStr = new StringBuilder();
+            try
+            {
+                response = (HttpWebResponse) Connection.GetResponse();
+                responseCode = response.StatusCode;
+
+                receiveStream = response.GetResponseStream();
+                instr = new StreamReader(receiveStream, Encoding.UTF8);
+                while ((inputLine = instr.ReadLine()) != null) {
+                    responseStr.Append(inputLine);
+                }
+                instr.Close();
+                switch ((int)responseStr.ToString()[0])
+                {
+                    // {
+                    case 123:
+                        obj = JObject.Parse(responseStr.ToString());
+                        break;
+                    // [
+                    case 91:
+                        obj = JArray.Parse(responseStr.ToString());//JArray
+                        break;
+                    default:
+                        throw new Error("invalid response: " + responseStr);
+                    // Other
+                }
+                if (responseCode != HttpStatusCode.OK) {
+                    Error.errorHandler((JObject) obj, int.Parse(responseCode.ToString()));
+                }
+            } catch (Exception e) {
+                JObject error = null;
+                error = JObject.Parse("{'message':'" + HttpUtility.UrlEncode(e.Message, Encoding.UTF8) + "'}");
+                var wex = (WebException) e;
+                if (wex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    var wexr = wex.Response as HttpWebResponse;
+                    if (wexr != null)
+                    {
+                        Error.errorHandler(error, (int) wexr.StatusCode);
+                    }
+                }
+                Error.errorHandler(error);
+            }
+            return obj;
         }
 
         private static String getQuery(JObject jsonObject, String index) {
@@ -204,11 +197,9 @@ namespace ConektaCSharp
                                     }
                                     result.Append(getQuery(array[i].ToObject<JObject>(), key));
                                 } else {
-                                    if (index != null) {
-                                        result.Append(HttpUtility.UrlEncode(index + "[" + key + "]" + "[]", Encoding.UTF8));
-                                    } else {
-                                        result.Append(HttpUtility.UrlEncode(key + "[]", Encoding.UTF8));
-                                    }
+                                    result.Append(index != null
+                                        ? HttpUtility.UrlEncode(index + "[" + key + "]" + "[]", Encoding.UTF8)
+                                        : HttpUtility.UrlEncode(key + "[]", Encoding.UTF8));
                                     result.Append("=");
                                     result.Append(HttpUtility.UrlEncode(array[i].ToString(), Encoding.UTF8));
                                 }

@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    class BankTransferPayment:PaymentMethod
+    public class BankTransferPayment:PaymentMethod
     {
         public String service_name;
         public String service_number;

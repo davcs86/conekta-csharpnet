@@ -68,135 +68,99 @@ namespace ConektaCSharp
         }
 
         protected static ConektaObject scpCreate(String className, JObject _params) {
-            try { 
-                ConektaRequestor requestor = new ConektaRequestor();
-                String url = classUrl(className);
-                JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
-                ConektaObject resource;
-                try {
-                    ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp."+toCamelCase(className));
-                    resource = (ConektaObject)handle.Unwrap();
-                    resource.LoadFromObject(jsonObject);
-                } catch (Exception e) {
-                    throw new Error(e.ToString());
-                }
-                return resource;
+            ConektaRequestor requestor = new ConektaRequestor();
+            String url = classUrl(className);
+            JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
+            ConektaObject resource;
+            try {
+                ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp."+toCamelCase(className));
+                resource = (ConektaObject)handle.Unwrap();
+                resource.LoadFromObject(jsonObject);
+            } catch (Exception e) {
+                throw new Error(e.ToString());
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
-            }
+            return resource;
         }
 
         protected static ConektaObject scpWhere(String className, JObject _params) {
-            try { 
-                ConektaRequestor requestor = new ConektaRequestor();
-                String url = classUrl(className);
-                JArray jsonArray = (JArray) requestor.Request("GET", url, _params);
-                ConektaObject resource = new ConektaObject();
-                resource.LoadFromArray(jsonArray);
-                return resource;
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            ConektaRequestor requestor = new ConektaRequestor();
+            String url = classUrl(className);
+            JArray jsonArray = (JArray) requestor.Request("GET", url, _params);
+            ConektaObject resource = new ConektaObject();
+            resource.LoadFromArray(jsonArray);
+            return resource;
         }
 
         protected ConektaObject delete(String parent, String member) {
-            try { 
-                this.customAction("DELETE", null, null);
-                return this;
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            customAction("DELETE", null, null);
+            return this;
         }
 
         protected void update(JObject _params) {
-            try { 
-                ConektaRequestor requestor = new ConektaRequestor();
-                String url = this.instanceUrl();
-                JObject jsonObject = (JObject) requestor.Request("PUT", url, _params);
-                try {
-                    this.LoadFromObject(jsonObject);
-                } catch (Exception e) {
-                    throw new Error(e.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
+            ConektaRequestor requestor = new ConektaRequestor();
+            String url = this.instanceUrl();
+            JObject jsonObject = (JObject) requestor.Request("PUT", url, _params);
+            try {
+                LoadFromObject(jsonObject);
+            } catch (Exception e) {
+                throw new Error(e.ToString());
             }
         }
 
         protected ConektaObject customAction(String method, String action, JObject _params) {
-            try { 
-                if (method == null) {
-                    method = "POST";
-                }
-                ConektaRequestor requestor = new ConektaRequestor();
-                String url = this.instanceUrl();
-                if (action != null) {
-                    url = url + "/" + action;
-                }
-                JObject jsonObject = (JObject) requestor.Request(method, url, _params);
-                try {
-                    this.LoadFromObject(jsonObject);
-                } catch (Exception e) {
-                    throw new Error(e.ToString());
-                }
-                return this;
+            if (method == null) {
+                method = "POST";
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
+            ConektaRequestor requestor = new ConektaRequestor();
+            String url = this.instanceUrl();
+            if (action != null) {
+                url = url + "/" + action;
             }
+            JObject jsonObject = (JObject) requestor.Request(method, url, _params);
+            try {
+                this.LoadFromObject(jsonObject);
+            } catch (Exception e) {
+                throw new Error(e.ToString());
+            }
+            return this;
         }
 
         protected ConektaObject createMember(String member, JObject _params) {
-            try { 
-                ConektaRequestor requestor = new ConektaRequestor();
-                String url = this.instanceUrl() + "/" + member;
-                JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
-                FieldInfo field;
-                ConektaObject conektaObject = null;
-                try {
-                    field = this.GetType().GetField(member);
+            ConektaRequestor requestor = new ConektaRequestor();
+            String url = this.instanceUrl() + "/" + member;
+            JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
+            FieldInfo field;
+            ConektaObject conektaObject = null;
+            try {
+                field = GetType().GetField(member);
 
-                    String parentClassName = this.GetType().Name.Substring(0, 1).ToLower() + this.GetType().Name.Substring(1);
-                    if (field.GetValue(this).GetType().Name.Equals("ConektaObject"))
-                    {
-                        ObjectHandle handle = Activator.CreateInstance(null,"ConektaCSharp." + toCamelCase(member));
-                        conektaObject = (ConektaObject)handle.Unwrap();
-                        conektaObject.LoadFromObject(jsonObject);
+                String parentClassName = this.GetType().Name.Substring(0, 1).ToLower() + this.GetType().Name.Substring(1);
+                if (field.GetValue(this).GetType().Name.Equals("ConektaObject"))
+                {
+                    ObjectHandle handle = Activator.CreateInstance(null,"ConektaCSharp." + toCamelCase(member));
+                    conektaObject = (ConektaObject)handle.Unwrap();
+                    conektaObject.LoadFromObject(jsonObject);
 
-                        conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
+                    conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
 
-                        ConektaObject objects = ((ConektaObject) field.GetValue(this));
-                        objects.Add(conektaObject);
-                        field.SetValue(this, objects);
-                    } else {
-                        ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + toCamelCase(member));
-                        conektaObject = (ConektaObject)handle.Unwrap();
+                    ConektaObject objects = ((ConektaObject) field.GetValue(this));
+                    objects.Add(conektaObject);
+                    field.SetValue(this, objects);
+                } else {
+                    ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + toCamelCase(member));
+                    conektaObject = (ConektaObject)handle.Unwrap();
 
-                        conektaObject.LoadFromObject(jsonObject);
-                        conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
+                    conektaObject.LoadFromObject(jsonObject);
+                    conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
 
-                        this.SetVal(member, conektaObject);
-                        field.SetValue(this, conektaObject);
-                        this.LoadFromObject(null);
-                    }
-                } catch (Exception e) {
-                    throw new Error(e.ToString());
+                    this.SetVal(member, conektaObject);
+                    field.SetValue(this, conektaObject);
+                    this.LoadFromObject(null);
                 }
-                return conektaObject;
+            } catch (Exception e) {
+                throw new Error(e.ToString());
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
-            }
+            return conektaObject;
         }
     }
 }

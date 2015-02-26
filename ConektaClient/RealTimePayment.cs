@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    class RealTimePayment:PaymentMethod
+    public class RealTimePayment:PaymentMethod
     {
         public String store_name;
         public String barcode;
