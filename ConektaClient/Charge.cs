@@ -89,7 +89,7 @@ namespace ConektaCSharp
                 try {
                     _params = JObject.Parse("{'amount':" + amount + "}");
                 } catch(Exception e) {
-                    throw new Exception(e.ToString());
+                    throw new Error(e.ToString());
                 }
                 return (Charge) customAction("POST", "refund", _params);
             }
@@ -105,7 +105,7 @@ namespace ConektaCSharp
                 try {
                     _params = JObject.Parse("{'amount':" + amount + "}");
                 } catch(Exception e) {
-                    throw new Exception(e.ToString());
+                    throw new Error(e.ToString());
                 }
                 return (Charge) customAction("POST", "refund", _params);
             }

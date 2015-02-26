@@ -26,7 +26,7 @@ namespace ConektaCSharp
                 exp_year = jsonObject["exp_year"].ToString();
                 name = jsonObject["name"].ToString();
             } catch (Exception e) {
-                throw new Exception(e.ToString());
+                throw new Error(e.ToString());
             }
         }
     }

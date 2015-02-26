@@ -215,7 +215,7 @@ namespace ConektaCSharp
                     } catch (Exception e) {
                         // No field found
                         //System.out.println(e.toString());
-                        throw new Exception(e.ToString());
+                        throw new Error(e.ToString());
                     }
                 }
             }
