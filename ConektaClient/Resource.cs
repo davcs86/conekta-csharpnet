@@ -1,0 +1,202 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Remoting;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+namespace ConektaCSharp
+{
+    public class Resource:ConektaObject
+    {
+        public Resource(String id = null):base(id) {
+        }
+
+        public static String classUrl(String className) {
+            try { 
+                String _base = "/" + className.ToLower() + "s";
+                return _base;
+            }
+            catch (Exception e)
+            {
+                throw new Error(e.ToString());
+            }
+        }
+
+        public String instanceUrl() {
+            try { 
+                if (string.IsNullOrEmpty(id)) {
+                    throw new Error("Could not get the id of Resource instance.");
+                }
+                String className = GetType().Name;
+                String _base = classUrl(className);
+                return _base + "/" + id;
+            }
+            catch (Exception e)
+            {
+                throw new Error(e.ToString());
+            }
+        }
+
+        protected static ConektaObject scpFind(String className, String id){
+            try { 
+                //Constructor c;
+                ConektaObject resource;
+                try {
+                    ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp."+toCamelCase(className));
+                    resource = (ConektaObject)handle.Unwrap();
+                    resource.SetId(id);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = ((Resource) resource).instanceUrl();
+                JObject jsonObject = (JObject) requestor.Request("GET", url, null);
+                try {
+                    resource.LoadFromObject(jsonObject);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+                return resource;
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.ToString());
+            }
+        }
+
+        protected static ConektaObject scpCreate(String className, JObject _params) {
+            try { 
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = classUrl(className);
+                JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
+                ConektaObject resource;
+                try {
+                    ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp."+toCamelCase(className));
+                    resource = (ConektaObject)handle.Unwrap();
+                    resource.LoadFromObject(jsonObject);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+                return resource;
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.ToString());
+            }
+        }
+
+        protected static ConektaObject scpWhere(String className, JObject _params) {
+            try { 
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = classUrl(className);
+                JArray jsonArray = (JArray) requestor.Request("GET", url, _params);
+                ConektaObject resource = new ConektaObject();
+                resource.LoadFromArray(jsonArray);
+                return resource;
+            }
+            catch (Exception e)
+            {
+                throw new Error(e.ToString());
+            }
+        }
+
+        protected ConektaObject delete(String parent, String member) {
+            try { 
+                this.customAction("DELETE", null, null);
+                return this;
+            }
+            catch (Exception e)
+            {
+                throw new Error(e.ToString());
+            }
+        }
+
+        protected void update(JObject _params) {
+            try { 
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = this.instanceUrl();
+                JObject jsonObject = (JObject) requestor.Request("PUT", url, _params);
+                try {
+                    this.LoadFromObject(jsonObject);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.ToString());
+            }
+        }
+
+        protected ConektaObject customAction(String method, String action, JObject _params) {
+            try { 
+                if (method == null) {
+                    method = "POST";
+                }
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = this.instanceUrl();
+                if (action != null) {
+                    url = url + "/" + action;
+                }
+                JObject jsonObject = (JObject) requestor.Request(method, url, _params);
+                try {
+                    this.LoadFromObject(jsonObject);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.ToString());
+            }
+        }
+
+        protected ConektaObject createMember(String member, JObject _params) {
+            try { 
+                ConektaRequestor requestor = new ConektaRequestor();
+                String url = this.instanceUrl() + "/" + member;
+                JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
+                FieldInfo field;
+                ConektaObject conektaObject = null;
+                try {
+                    field = this.GetType().GetField(member);
+
+                    String parentClassName = this.GetType().Name.Substring(0, 1).ToLower() + this.GetType().Name.Substring(1);
+                    if (field.GetValue(this).GetType().Name.Equals("ConektaObject"))
+                    {
+                        ObjectHandle handle = Activator.CreateInstance(null,"ConektaCSharp." + toCamelCase(member));
+                        conektaObject = (ConektaObject)handle.Unwrap();
+                        conektaObject.LoadFromObject(jsonObject);
+
+                        conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
+
+                        ConektaObject objects = ((ConektaObject) field.GetValue(this));
+                        objects.Add(conektaObject);
+                        field.SetValue(this, objects);
+                    } else {
+                        ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + toCamelCase(member));
+                        conektaObject = (ConektaObject)handle.Unwrap();
+
+                        conektaObject.LoadFromObject(jsonObject);
+                        conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
+
+                        this.SetVal(member, conektaObject);
+                        field.SetValue(this, conektaObject);
+                        this.LoadFromObject(null);
+                    }
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
+                }
+                return conektaObject;
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.ToString());
+            }
+        }
+    }
+}
