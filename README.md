@@ -1,5 +1,3 @@
-![alt tag](https://raw.github.com/davcs86/conekta-csharpnet/master/readme_files/cover.png)
-
 # Conekta C# 1.0.7
 
 This is an un-official C# library that allows interaction with https://api.conekta.io API.
