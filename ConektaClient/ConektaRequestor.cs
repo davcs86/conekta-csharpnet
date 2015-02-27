@@ -24,9 +24,12 @@ namespace ConektaCSharp
         {
             Version ver = Environment.Version;
             bindings_version = Conekta.ApiVersion;
-            lang = "java"; // "csharpnet";
-            lang_version = "1.7.0_76"; //ver.ToString();
-            publisher = "conekta"; //"davcs86@gmail.com";
+            //lang = "java";
+            lang = "csharpnet";
+            //lang_version = "1.7.0_76";
+            lang_version = ver.ToString();
+            //publisher = "conekta";
+            publisher = "davcs86@gmail.com";
         }
     }
 
@@ -52,8 +55,8 @@ namespace ConektaCSharp
                 ConektaRequestorUa userAgent = new ConektaRequestorUa();
                 Connection.Accept = "application/vnd.conekta-v" + Conekta.ApiVersion + "+json";
             
-                //Connection.UserAgent = "Conekta/v1 CSharpBindings/" + Conekta.Version;
-                Connection.UserAgent = "Conekta/v1 JavaBindings/" + Conekta.Version;
+                Connection.UserAgent = "Conekta/v1 CSharpBindings/" + Conekta.Version;
+                //Connection.UserAgent = "Conekta/v1 JavaBindings/" + Conekta.Version;
             
                 Connection.ContentType = "application/x-www-form-urlencoded";
 
