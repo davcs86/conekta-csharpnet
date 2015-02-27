@@ -36,23 +36,11 @@ namespace ConektaCSharp
         }
 
         public void update(JObject _params){
-            try{
-                base.update(_params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            base.update(_params);
         }
 
         public void delete(){
-            try {
-                this.delete("customer", "cards");
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.delete("customer", "cards");
         }
     }
 }

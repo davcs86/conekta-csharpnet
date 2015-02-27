@@ -41,8 +41,6 @@ namespace ConektaCSharp
         }
 
         protected static ConektaObject scpFind(String className, String id){
-            try { 
-                //Constructor c;
                 ConektaObject resource;
                 try {
                     ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp."+toCamelCase(className));
@@ -60,11 +58,7 @@ namespace ConektaCSharp
                     throw new Error(e.ToString());
                 }
                 return resource;
-            }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
-            }
+            
         }
 
         protected static ConektaObject scpCreate(String className, JObject _params) {

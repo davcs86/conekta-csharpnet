@@ -18,25 +18,11 @@ namespace ConektaCSharp
         public Event() :base(){}
 
         public static ConektaObject where(JObject _params) {
-            try { 
-                //String className = Event.class.getCanonicalName();
-                return (ConektaObject) scpWhere("event", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject) scpWhere("event", _params);
         }
 
         public static ConektaObject where() {
-            try { 
-                //String className = Event.class.getCanonicalName();
-                return (ConektaObject) scpWhere("event", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject) scpWhere("event", null);
         }
     }
 }

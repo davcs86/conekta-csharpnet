@@ -20,63 +20,33 @@ namespace ConektaCSharp
         public String currency;
         public int amount;
 
-        public Plan(String _id=null):base(_id){}
+        public Plan(String id=null):base(id){}
 
         public Plan():base(){}
 
-        public static Plan find(String _id)  {
-            try { 
-                //String className = Plan.class.getCanonicalName();
-                return (Plan) scpFind("plan", _id);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+        public static Plan find(String id)  {
+            return (Plan) scpFind("plan", id);
         }
 
         public static ConektaObject where(JObject _params) {
-            try
-            {
-                //String className = Plan.class.getCanonicalName();
-                return (ConektaObject)scpWhere("plan", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject)scpWhere("plan", _params);
         }
 
         public static ConektaObject where() {
-            try { 
-                //String className = Plan.class.getCanonicalName();
-                return (ConektaObject) scpWhere("plan", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject) scpWhere("plan", null);
         }
 
         public static Plan create(JObject _params) {
-            try { 
-                //String className = Plan.class.getCanonicalName();
-                return (Plan) scpCreate("plan", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Plan) scpCreate("plan", _params);
+        }
+
+        public void update(JObject _params)
+        {
+            base.update(_params);
         }
 
         public void delete() {
-            try { 
-                this.delete(null, null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.delete(null, null);
         }
     }
 }

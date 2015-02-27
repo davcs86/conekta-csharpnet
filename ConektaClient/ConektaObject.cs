@@ -86,24 +86,10 @@ namespace ConektaCSharp
             try { 
                 String key;
                 JObject jsonObject;
-                try
-                {
-                    key = className ?? jsonArray[i]["object"].ToString();
-                    jsonObject = jsonArray[i].ToObject<JObject>();
-                }
-                catch (Exception e)
-                {
-                    throw new Error(e.ToString());
-                }
+                key = className ?? jsonArray[i]["object"].ToString();
+                jsonObject = jsonArray[i].ToObject<JObject>();
                 ConektaObject conektaObject = ConektaObjectFromJSONFactory.ConektaObjectFactory(jsonObject, key);
-                try
-                {
-                    conektaObject.LoadFromObject(jsonObject);
-                }
-                catch (Exception e)
-                {
-                    throw new Error(e.ToString());
-                }
+                conektaObject.LoadFromObject(jsonObject);
                 return conektaObject;
             }
             catch (Exception ex)

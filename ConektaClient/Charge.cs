@@ -31,35 +31,15 @@ namespace ConektaCSharp
         public Charge() : base() {}
         
         public static Charge find(String id) {
-            try{
-                return (Charge) scpFind("charge", id);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Charge) scpFind("charge", id);
         }
 
         public static ConektaObject where(JObject _params) {
-            try{
-                //String className = Charge.class.getCanonicalName();
-                return scpWhere("charge", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return scpWhere("charge", _params);
         }
 
         public static ConektaObject where() {
-            try { 
-                //String className = Charge.class.getCanonicalName();
-                return scpWhere("charge", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return scpWhere("charge", null);
         }
 
         public static Charge create(JObject _params){
@@ -71,22 +51,14 @@ namespace ConektaCSharp
         }
 
         public Charge refund(int amount){
-            JObject _params;
-            try {
-                _params = JObject.Parse("{'amount':" + amount + "}");
-            } catch(Exception e) {
-                throw new Error(e.ToString());
-            }
+            JObject _params = JObject.Parse("{'amount':" + amount + "}");
+            
             return (Charge) customAction("POST", "refund", _params);
         }
 
         public Charge refund(){
-            JObject _params;
-            try {
-                _params = JObject.Parse("{'amount':" + amount + "}");
-            } catch(Exception e) {
-                throw new Error(e.ToString());
-            }
+            JObject _params = JObject.Parse("{'amount':" + amount + "}");
+            
             return (Charge) customAction("POST", "refund", _params);
         }
     }

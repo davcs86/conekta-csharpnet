@@ -35,43 +35,19 @@ namespace ConektaCSharp
         }
 
         public void update(JObject _params) {
-            try { 
-                base.update(_params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            base.update(_params);
         }
 
         public void pause() {
-            try { 
-                this.customAction("POST", "pause", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.customAction("POST", "pause", null);
         }
 
         public void cancel() {
-            try { 
-                this.customAction("POST", "cancel", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.customAction("POST", "cancel", null);
         }
 
         public void resume() {
-            try { 
-                this.customAction("POST", "resume", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.customAction("POST", "resume", null);
         }
     }
 }

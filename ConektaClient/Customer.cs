@@ -30,89 +30,43 @@ namespace ConektaCSharp
         }
 
         public override void LoadFromObject(JObject jsonObject) {
-            try { 
-                if (jsonObject != null) {
-                    try {
-                        base.LoadFromObject(jsonObject);
-                    } catch (Exception e) {
-                        throw new Error(e.ToString());
-                    }
-                }
-                for (int i = 0; i < cards.Count; i++) {
-                    ((Card) cards[i]).customer = this;
-                }
-                if (subscription != null) {
-                    subscription.customer = this;
+            if (jsonObject != null) {
+                try {
+                    base.LoadFromObject(jsonObject);
+                } catch (Exception e) {
+                    throw new Error(e.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
+            for (int i = 0; i < cards.Count; i++) {
+                ((Card) cards[i]).customer = this;
+            }
+            if (subscription != null) {
+                subscription.customer = this;
             }
         }
 
         public static Customer find(String id) {
-            try{
-                //String className = Customer.class.getCanonicalName();
-                return (Customer) scpFind("customer", id);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Customer) scpFind("customer", id);
         }
 
         public static Customer create(JObject _params){
-            try { 
-                //String className = Customer.class.getCanonicalName();
-                return (Customer) scpCreate("customer", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Customer) scpCreate("customer", _params);
         }
 
         public static ConektaObject where(JObject _params) {
-            try { 
-                //String className = Customer.class.getCanonicalName();
-                return (ConektaObject) scpWhere("customer", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject) scpWhere("customer", _params);
         }
 
         public static ConektaObject where() {
-            try { 
-                //String className = Customer.class.getCanonicalName();
-                return (ConektaObject) scpWhere("customer", null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (ConektaObject) scpWhere("customer", null);
         }
 
         public void delete() {
-            try { 
-                this.delete(null, null);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            this.delete(null, null);
         }
 
         public void update(JObject _params) {
-            try { 
-                base.update(_params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            base.update(_params);
         }
 
         public Card createCard(JObject _params){

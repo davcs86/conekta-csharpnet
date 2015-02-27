@@ -162,16 +162,14 @@ namespace ConektaCSharpTests
         }
 
         [TestMethod]
-        public Charge testSuccesfulCapture() {
-            JObject capture = JObject.Parse("{'capture': false}");
+        public void testSuccesfulCapture() {
             JObject _params = valid_payment_method;
             _params["card"] = valid_visa_card["card"];
-            _params["capture"] = capture["capture"];
+            _params["capture"] = "false";
             Charge charge = Charge.create(_params);
             Assert.IsTrue(charge.status.Equals("pre_authorized"));
             charge.capture();
             Assert.IsTrue(charge.status.Equals("paid"));
-            return charge;
         }
     }
 }
