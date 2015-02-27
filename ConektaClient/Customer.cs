@@ -29,7 +29,7 @@ namespace ConektaCSharp
             subscription = new Subscription();
         }
 
-        public void LoadFromObject(JObject jsonObject) {
+        public override void LoadFromObject(JObject jsonObject) {
             try { 
                 if (jsonObject != null) {
                     try {
@@ -116,23 +116,11 @@ namespace ConektaCSharp
         }
 
         public Card createCard(JObject _params){
-            try { 
-                return (Card) this.createMember("cards", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Card) this.createMember("cards", _params);
         }
 
         public Subscription createSubscription(JObject _params) {
-            try { 
-                return (Subscription) this.createMember("subscription", _params);
-            }
-            catch (Exception e)
-            {
-                throw new Error(e.ToString());
-            }
+            return (Subscription) this.createMember("subscription", _params);
         }
     }
 }

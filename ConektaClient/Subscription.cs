@@ -20,7 +20,7 @@ namespace ConektaCSharp
         public Subscription(String id = null) : base(id) { }
         public Subscription() : base() { }
 
-        public String instanceUrl() {
+        public override String instanceUrl() {
             try { 
                 if (id.Length == 0) {
                     throw new Error("Could not get the id of Resource instance.");

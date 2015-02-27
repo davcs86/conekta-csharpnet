@@ -112,7 +112,7 @@ namespace ConektaCSharp
             }
         }
 
-        public void LoadFromObject(JObject jsonObject)
+        public virtual void LoadFromObject(JObject jsonObject)
         {
             try { 
                 IEnumerator itr = jsonObject.Properties().GetEnumerator();

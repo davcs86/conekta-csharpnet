@@ -19,14 +19,14 @@ namespace ConektaCSharp
         public Card(String id = null) : base(id) { }
         public Card() : base() { }
 
-        public String instanceUrl() {
+        public override String instanceUrl() {
             try
             {
                 if (id.Length == 0)
                 {
                     throw new Error("Could not get the id of Resource instance.");
                 }
-                String _base = this.customer.instanceUrl();
+                String _base = customer.instanceUrl();
                 return _base + "/cards/" + id;
             }
             catch (Exception e)

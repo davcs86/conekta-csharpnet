@@ -25,7 +25,7 @@ namespace ConektaCSharp
             }
         }
 
-        public String instanceUrl() {
+        public virtual String instanceUrl() {
             try { 
                 if (string.IsNullOrEmpty(id)) {
                     throw new Error("Could not get the id of Resource instance.");
@@ -131,34 +131,32 @@ namespace ConektaCSharp
             JObject jsonObject = (JObject) requestor.Request("POST", url, _params);
             FieldInfo field;
             ConektaObject conektaObject = null;
-            try {
-                field = GetType().GetField(member);
+            field = GetType().GetField(member);
+            String className;
+            String parentClassName = this.GetType().Name.Substring(0, 1).ToLower() + this.GetType().Name.Substring(1);
+            if (field.GetValue(this).GetType().Name.Equals("ConektaObject"))
+            {
+                className = member.Substring(0, 1).ToUpper() + member.Substring(1, member.Length - 2).ToLower();
+                ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + className);
+                conektaObject = (ConektaObject)handle.Unwrap();
+                conektaObject.LoadFromObject(jsonObject);
 
-                String parentClassName = this.GetType().Name.Substring(0, 1).ToLower() + this.GetType().Name.Substring(1);
-                if (field.GetValue(this).GetType().Name.Equals("ConektaObject"))
-                {
-                    ObjectHandle handle = Activator.CreateInstance(null,"ConektaCSharp." + toCamelCase(member));
-                    conektaObject = (ConektaObject)handle.Unwrap();
-                    conektaObject.LoadFromObject(jsonObject);
+                conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
 
-                    conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
+                ConektaObject objects = ((ConektaObject) field.GetValue(this));
+                objects.Add(conektaObject);
+                field.SetValue(this, objects);
+            } else {
+                className = member.Substring(0, 1).ToUpper() + member.Substring(1).ToLower();
+                ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + className);
+                conektaObject = (ConektaObject)handle.Unwrap();
 
-                    ConektaObject objects = ((ConektaObject) field.GetValue(this));
-                    objects.Add(conektaObject);
-                    field.SetValue(this, objects);
-                } else {
-                    ObjectHandle handle = Activator.CreateInstance(null, "ConektaCSharp." + toCamelCase(member));
-                    conektaObject = (ConektaObject)handle.Unwrap();
+                conektaObject.LoadFromObject(jsonObject);
+                conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
 
-                    conektaObject.LoadFromObject(jsonObject);
-                    conektaObject.GetType().GetField(parentClassName).SetValue(conektaObject, this);
-
-                    this.SetVal(member, conektaObject);
-                    field.SetValue(this, conektaObject);
-                    this.LoadFromObject(null);
-                }
-            } catch (Exception e) {
-                throw new Error(e.ToString());
+                this.SetVal(member, conektaObject);
+                field.SetValue(this, conektaObject);
+                this.LoadFromObject(null);
             }
             return conektaObject;
         }
