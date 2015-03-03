@@ -14,7 +14,51 @@ To get started, add the following to your code:
 
 ## Usage
 ```csharp    
-using ConektaCSharp;
+Conekta.ApiKey ="1tv5yJp3xnVZ7eK67m4h";
+JObject valid_payment_method;
+JObject valid_visa_card;
+valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
+valid_payment_method = JObject.Parse("{'description':'Stogies'," +
+"'reference_id':'9839-wolf_pack'," +
+"'amount':20000," +
+"'currency':'MXN'}");
+JObject _params = valid_payment_method;
+_params["card"] = valid_visa_card["card"];
+try
+{
+    Charge charge = Charge.create(_params);
+    Console.WriteLine(charge.ToString());
+}
+catch (Error e)
+{
+    Console.WriteLine(e.ToString());
+}
+
+// Console.WriteLine(charge.ToString()); 
+
+{
+  "id": "54f5e2f419ce8824a00086ce",
+  "livemode": false,
+  "created_at": 1425400564,
+  "status": "paid",
+  "currency": "MXN",
+  "description": "Stogies",
+  "reference_id": "9839-wolf_pack",
+  "amount": 20000,
+  "paid_at": 1425400582,
+  "fee": 963,
+  "payment_method": {
+    "name": "Jorge Lopez",
+    "exp_month": "12",
+    "exp_year": "19",
+    "auth_code": "000000",
+    "type": "credit",
+    "last4": "4242",
+    "brand": "visa"
+  },
+  "details": {}
+}
+
 ```
 
 ## Documentation
