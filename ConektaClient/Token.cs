@@ -8,18 +8,22 @@ namespace ConektaCSharp
         public Boolean livemode;
         public Boolean used;
 
-        public Token(String id = null) : base(id) { }
+        public Token(String id = null) : base(id)
+        {
+        }
 
-        public Token() : base() { }
+        public Token()
+        {
+        }
 
         public static Token find(String id)
         {
-            return (Token)scpFind("token", id);
+            return (Token) scpFind("token", id);
         }
 
         public static Token create(JObject _params)
         {
-            return (Token)scpCreate("token", _params);
+            return (Token) scpCreate("token", _params);
         }
     }
 }

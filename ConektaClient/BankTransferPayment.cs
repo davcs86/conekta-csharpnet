@@ -3,20 +3,24 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    public class BankTransferPayment:PaymentMethod
+    public class BankTransferPayment : PaymentMethod
     {
+        public String reference;
         public String service_name;
         public String service_number;
-        public String reference;
 
-        public BankTransferPayment(JObject jsonObject) {
+        public BankTransferPayment(JObject jsonObject)
+        {
             //this.type = "bank_transfer_payment";
-            try {
+            try
+            {
                 service_name = jsonObject["service_name"].ToString();
                 service_number = jsonObject["service_number"].ToString();
                 reference = jsonObject["reference"].ToString();
-            } catch (Exception e) {
-                throw new Error(e.ToString());
+            }
+            catch (Exception e)
+            {
+                throw new Error(e.Message);
             }
         }
     }

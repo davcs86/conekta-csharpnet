@@ -3,16 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-
     public class ConektaObject : ArrayList
     {
+        protected Dictionary<string, object> _values;
+        public String id;
+
+        public ConektaObject(String _id = null)
+        {
+            id = _id;
+            _values = new Dictionary<string, object>();
+        }
+
+        public ConektaObject()
+        {
+            id = "";
+            _values = new Dictionary<string, object>();
+        }
 
         public Dictionary<string, object> values
         {
@@ -30,22 +42,6 @@ namespace ConektaCSharp
             }
         }
 
-        protected Dictionary<string, object> _values;
-
-        public String id;
-
-        public ConektaObject(String _id = null)
-        {
-            id = _id;
-            _values = new Dictionary<string, object>();
-        }
-
-        public ConektaObject()
-        {
-            id = "";
-            _values = new Dictionary<string, object>();
-        }
-
         public String GetId()
         {
             return id;
@@ -58,7 +54,7 @@ namespace ConektaCSharp
 
         public Object GetVal(String key)
         {
-            return (key==null)?null:_values[key];
+            return (key == null) ? null : _values[key];
         }
 
         public void SetVal(String key, Object value)
@@ -74,157 +70,164 @@ namespace ConektaCSharp
             }
         }
 
-        public void LoadFromArray(JArray jsonArray){
-            try{
+        public void LoadFromArray(JArray jsonArray)
+        {
+            try
+            {
                 LoadFromArray(jsonArray, null);
             }
             catch (Exception e)
             {
-                throw new Error(e.ToString());
+                throw new Error(e.Message);
             }
         }
 
-        public void LoadFromArray(JArray jsonArray, String className) {
-            try{
-                for (var i = 0; i < jsonArray.Count; i++) {
-                    ConektaObject conektaObject = aux(jsonArray, className, i);
-                
+        public void LoadFromArray(JArray jsonArray, String className)
+        {
+            try
+            {
+                for (var i = 0; i < jsonArray.Count; i++)
+                {
+                    var conektaObject = aux(jsonArray, className, i);
+
                     Add(conektaObject);
                 }
             }
             catch (Exception e)
             {
-                throw new Error(e.ToString());
+                throw new Error(e.Message);
             }
         }
 
         private static ConektaObject aux(JArray jsonArray, String className, int i)
         {
-            try { 
+            try
+            {
                 String key;
                 JObject jsonObject;
                 key = className ?? jsonArray[i]["object"].ToString();
                 jsonObject = jsonArray[i].ToObject<JObject>();
-                ConektaObject conektaObject = ConektaObjectFromJSONFactory.ConektaObjectFactory(jsonObject, key);
+                var conektaObject = ConektaObjectFromJSONFactory.ConektaObjectFactory(jsonObject, key);
                 conektaObject.LoadFromObject(jsonObject);
                 return conektaObject;
             }
             catch (Exception ex)
             {
-                throw new Error(ex.ToString());
+                throw new Error(ex.Message);
             }
         }
 
         public virtual void LoadFromObject(JObject jsonObject)
         {
-            try { 
-                IEnumerator itr = jsonObject.Properties().GetEnumerator();
-                FieldInfo field;
-                while (itr.MoveNext()) {
-                    String key = ((JProperty)itr.Current).Name;
-                    field = this.GetType().GetField(key);
-                    // Si el campo no existe, omitir
-                    if (field==null) continue;
-                    Object obj = jsonObject[key];
-                    try {
-                        Boolean isConektaObject = (field.FieldType.Namespace ?? "").Equals("ConektaCSharp");
+            IEnumerator itr = jsonObject.Properties().GetEnumerator();
+            FieldInfo field;
+            while (itr.MoveNext())
+            {
+                var key = ((JProperty) itr.Current).Name;
+                field = GetType().GetField(key);
+                // Si el campo no existe, omitir
+                if (field == null) continue;
+                Object obj = jsonObject[key];
+                try
+                {
+                    var isConektaObject = (field.FieldType.Namespace ?? "").Equals("ConektaCSharp");
 
-                        String objStr = obj.ToString();
+                    var objStr = obj.ToString();
 
-                        if (!String.IsNullOrWhiteSpace(objStr))
+                    if (!String.IsNullOrWhiteSpace(objStr))
+                    {
+                        switch ((int) objStr[0])
                         {
-                            switch ((int)objStr[0])
-                            {
-                                // {
-                                case 123:
-                                    var o = JObject.Parse(objStr);
-                                    if (o["object"] != null)
+                            // {
+                            case 123:
+                                var o = JObject.Parse(objStr);
+                                if (o["object"] != null)
+                                {
+                                    var conektaObject = ConektaObjectFromJSONFactory.ConektaObjectFactory(o,
+                                        o["object"].ToString());
+                                    field.SetValue(this, conektaObject);
+                                    SetVal(key, conektaObject);
+                                }
+                                else
+                                {
+                                    if (isConektaObject)
                                     {
-                                        var conektaObject = ConektaObjectFromJSONFactory.ConektaObjectFactory(o, o["object"].ToString());
-                                        field.SetValue(this, conektaObject);
-                                        this.SetVal(key, conektaObject);
+                                        var handle = Activator.CreateInstance(null, field.FieldType.FullName);
+                                        var attr = (ConektaObject) handle.Unwrap();
+
+                                        attr.LoadFromObject((JObject) obj);
+                                        field.SetValue(this, attr);
+                                        SetVal(key, attr);
                                     }
                                     else
                                     {
-                                        if (isConektaObject)
+                                        var tipoCampo = Type.GetType(field.FieldType.FullName);
+                                        var valorConvertido = Convert.ChangeType(obj, tipoCampo);
+                                        field.SetValue(this, valorConvertido);
+                                        SetVal(key, valorConvertido);
+                                    }
+                                }
+
+                                break;
+                            // [
+                            case 91:
+                                var jsonArray = JArray.Parse(objStr);
+                                if (jsonArray.Count > 0)
+                                {
+                                    var conektaObject = new ConektaObject();
+                                    if (isConektaObject)
+                                    {
+                                        var handle = Activator.CreateInstance(null, field.FieldType.FullName);
+                                        conektaObject = (ConektaObject) handle.Unwrap();
+                                    }
+
+                                    foreach (var jItem in jsonArray)
+                                    {
+                                        if (jsonArray[0]["object"] != null)
                                         {
-
-                                            ObjectHandle handle = Activator.CreateInstance(null, field.FieldType.FullName);
-                                            var attr = (ConektaObject)handle.Unwrap();
-
-                                            attr.LoadFromObject((JObject)obj);
-                                            field.SetValue(this, attr);
-                                            this.SetVal(key, attr);
+                                            conektaObject.Add(
+                                                ConektaObjectFromJSONFactory.ConektaObjectFactory(
+                                                    jItem.ToObject<JObject>(),
+                                                    jItem["object"].ToString()));
                                         }
                                         else
                                         {
-                                            Type tipoCampo = Type.GetType(field.FieldType.FullName);
-                                            var valorConvertido = Convert.ChangeType(obj, tipoCampo);
-                                            field.SetValue(this, valorConvertido);
-                                            this.SetVal(key, valorConvertido);
+                                            conektaObject.Add(
+                                                ConektaObjectFromJSONFactory.ConektaObjectFactory(
+                                                    jItem.ToObject<JObject>(), key));
                                         }
                                     }
+                                    field.SetValue(this, conektaObject);
+                                    SetVal(key, conektaObject);
+                                }
+                                break;
+                            default:
+                                if (isConektaObject)
+                                {
+                                    var handle = Activator.CreateInstance(null, field.FieldType.FullName);
+                                    var attr = (ConektaObject) handle.Unwrap();
 
-                                    break;
-                                // [
-                                case 91:
-                                    JArray jsonArray = JArray.Parse(objStr);
-                                    if (jsonArray.Count > 0)
-                                    {
-                                        var conektaObject = new ConektaObject();
-                                        if (isConektaObject)
-                                        {
-                                            ObjectHandle handle = Activator.CreateInstance(null, field.FieldType.FullName);
-                                            conektaObject = (ConektaObject)handle.Unwrap();
-                                        }
-                                    
-                                        for (int i = 0; i < jsonArray.Count; i++)
-                                        {
-                                            if (jsonArray[0]["object"] != null)
-                                            {
-                                                conektaObject.Add(ConektaObjectFromJSONFactory.ConektaObjectFactory(jsonArray[i].ToObject<JObject>(), jsonArray[i]["object"].ToString()));
-                                            }
-                                            else
-                                            {
-                                                conektaObject.Add(ConektaObjectFromJSONFactory.ConektaObjectFactory(jsonArray[i].ToObject<JObject>(), key));
-                                            }
-                                        }
-                                        field.SetValue(this, conektaObject);
-                                        this.SetVal(key, conektaObject);
-                                    }
-                                    break;
-                                default:
-                                    if (isConektaObject)
-                                    {
-
-                                        ObjectHandle handle = Activator.CreateInstance(null, field.FieldType.FullName);
-                                        var attr = (ConektaObject)handle.Unwrap();
-
-                                        attr.LoadFromObject((JObject)obj);
-                                        field.SetValue(this, attr);
-                                        this.SetVal(key, attr);
-                                    }
-                                    else
-                                    {
-                                        Type tipoCampo = Type.GetType(field.FieldType.FullName);
-                                        var valorConvertido = Convert.ChangeType(obj, tipoCampo);
-                                        field.SetValue(this, valorConvertido);
-                                        this.SetVal(key, valorConvertido);
-                                    }
-                                    break;
-                            }
+                                    attr.LoadFromObject((JObject) obj);
+                                    field.SetValue(this, attr);
+                                    SetVal(key, attr);
+                                }
+                                else
+                                {
+                                    var tipoCampo = Type.GetType(field.FieldType.FullName);
+                                    var valorConvertido = Convert.ChangeType(obj, tipoCampo);
+                                    field.SetValue(this, valorConvertido);
+                                    SetVal(key, valorConvertido);
+                                }
+                                break;
                         }
-                    
-                    } catch (Exception e) {
-                        // No field found
-                        //System.out.println(e.toString());
-                        throw new Error(e.ToString());
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Error(ex.ToString());
+                catch (Exception e)
+                {
+                    // No field found
+                    //System.out.println(e.toString());
+                    throw new Error(e.Message);
+                }
             }
         }
 
@@ -233,14 +236,15 @@ namespace ConektaCSharp
             return JsonConvert.SerializeObject(values, Formatting.Indented, new KeyValuePairConverter());
         }
 
-        public static String toCamelCase(String s) {
-            String[] parts = s.Split('_');
+        public static String toCamelCase(String s)
+        {
+            var parts = s.Split('_');
             return parts.Aggregate("", (current, part) => current + toProperCase(part));
         }
 
-        static String toProperCase(String s) {
+        private static String toProperCase(String s)
+        {
             return s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower();
         }
-
     }
 }

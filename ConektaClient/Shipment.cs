@@ -2,15 +2,20 @@
 
 namespace ConektaCSharp
 {
-    public class Shipment:Resource
+    public class Shipment : Resource
     {
+        public Address address;
         public String carrier;
+        public int price;
         public String service;
         public String tracking_id;
-        public int price;
-        public Address address;
-        
-        public Shipment(String id = null) : base(id) { }
-        public Shipment() : base() { }
+
+        public Shipment(String id = null) : base(id)
+        {
+        }
+
+        public Shipment()
+        {
+        }
     }
 }

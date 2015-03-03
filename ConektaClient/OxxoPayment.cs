@@ -20,7 +20,7 @@ namespace ConektaCSharp
             }
             catch (Exception e)
             {
-                throw new Error(e.ToString());
+                throw new Error(e.Message);
             }
         }
     }

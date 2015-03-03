@@ -2,7 +2,8 @@
 
 namespace ConektaCSharp
 {
-    public abstract class PaymentMethod : ConektaObject {
+    public abstract class PaymentMethod : ConektaObject
+    {
         public String type;
     }
 }

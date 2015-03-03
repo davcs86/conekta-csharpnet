@@ -3,49 +3,70 @@ using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
 {
-    public class Error : Exception {
-
+    public class Error : Exception
+    {
+        public String _params;
+        public int code;
         public String message;
         public String type;
-        public int code;
-        public String _params;
 
-        public Error(String message) : this(message,"",0,"") { }
+        public Error(String message) : this(message, "", 0, "")
+        {
+        }
 
-        public Error(String message, String type, int code, String _params):base(message) {
+        public Error(String message, String type, int code, String _params) : base(message)
+        {
             this.message = message;
             this.type = type;
             this.code = code;
             this._params = _params;
         }
 
-        public override String ToString() {
+        public override String ToString()
+        {
             return message;
         }
 
-        public static void errorHandler(JObject response, int responseCode=0) {
+        public static void errorHandler(JObject response, int responseCode = 0)
+        {
             String message = null;
             String type = null;
             String __params = null;
-            if (response["message"]!=null) {
-                try {
+            if (response["message"] != null)
+            {
+                try
+                {
                     message = response["message"].ToString();
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
+                    // ignored
                 }
             }
-            if (response["type"]!=null) {
-                try {
+            if (response["type"] != null)
+            {
+                try
+                {
                     type = response["type"].ToString();
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
+                    // ignored
                 }
             }
-            if (response["param"]!=null) {
-                try {
+            if (response["param"] != null)
+            {
+                try
+                {
                     __params = response["param"].ToString();
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
+                    // ignored
                 }
             }
-            switch (responseCode) {
+            switch (responseCode)
+            {
                 case 400:
                     throw new MalformedRequestError(message, type, responseCode, __params);
                 case 401:
@@ -63,44 +84,59 @@ namespace ConektaCSharp
             }
         }
     }
-    public class ApiError : Error {
 
-        public ApiError(String message, String type, int code, String _params) :base(message, type, code, _params){}
+    public class ApiError : Error
+    {
+        public ApiError(String message, String type, int code, String _params) : base(message, type, code, _params)
+        {
+        }
     }
 
     public class NoConnectionError : Error
     {
-
-        public NoConnectionError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public NoConnectionError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 
     public class AuthenticationError : Error
     {
-
-        public AuthenticationError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public AuthenticationError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 
     public class ParameterValidationError : Error
     {
-
-        public ParameterValidationError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public ParameterValidationError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 
     public class ProcessingError : Error
     {
-
-        public ProcessingError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public ProcessingError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 
     public class ResourceNotFoundError : Error
     {
-
-        public ResourceNotFoundError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public ResourceNotFoundError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 
     public class MalformedRequestError : Error
     {
-
-        public MalformedRequestError(String message, String type, int code, String _params) : base(message, type, code, _params) { }
+        public MalformedRequestError(String message, String type, int code, String _params)
+            : base(message, type, code, _params)
+        {
+        }
     }
 }
