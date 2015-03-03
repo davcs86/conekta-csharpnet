@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -8,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Conekta API client for C#")]
 [assembly: AssemblyDescription("C# Bindings for Conekta API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("David Castillo Sanchez <davcs86@gmail.com>")]
+[assembly: AssemblyCompany("David Castillo <davcs86@gmail.com>")]
 [assembly: AssemblyProduct("C# Bindings for Conekta API")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("Conekta Client for C#")]

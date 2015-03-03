@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
@@ -14,19 +13,37 @@ namespace ConektaCSharp
 
     public class ConektaObject : ArrayList
     {
-        protected Dictionary<string, object> values;
+
+        public Dictionary<string, object> values
+        {
+            get
+            {
+                var nvalues = new Dictionary<String, Object>();
+
+                foreach (var item in _values)
+                {
+                    var o = item.Value as ConektaObject;
+                    nvalues.Add(item.Key, (o != null) ? o._values : item.Value);
+                }
+
+                return nvalues;
+            }
+        }
+
+        protected Dictionary<string, object> _values;
+
         public String id;
 
         public ConektaObject(String _id = null)
         {
             id = _id;
-            values = new Dictionary<string, object>();
+            _values = new Dictionary<string, object>();
         }
 
         public ConektaObject()
         {
             id = "";
-            values = new Dictionary<string, object>();
+            _values = new Dictionary<string, object>();
         }
 
         public String GetId()
@@ -41,19 +58,19 @@ namespace ConektaCSharp
 
         public Object GetVal(String key)
         {
-            return (key==null)?null:values[key];
+            return (key==null)?null:_values[key];
         }
 
         public void SetVal(String key, Object value)
         {
             if (key == null) return;
-            if (values.ContainsKey(key))
+            if (_values.ContainsKey(key))
             {
-                values[key] = value;
+                _values[key] = value;
             }
             else
             {
-                values.Add(key, value);
+                _values.Add(key, value);
             }
         }
 
@@ -213,7 +230,7 @@ namespace ConektaCSharp
 
         public override String ToString()
         {
-            return JObject.FromObject(this).ToString();
+            return JsonConvert.SerializeObject(values, Formatting.Indented, new KeyValuePairConverter());
         }
 
         public static String toCamelCase(String s) {

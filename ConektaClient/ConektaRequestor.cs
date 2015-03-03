@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using System.Net;
-using System.Web;
-using System.Security.Cryptography;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
-using System.Reflection;
+using System.Text;
+using System.Web;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharp
