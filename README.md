@@ -2,28 +2,38 @@
 
 This is an un-official C# library that allows interaction with https://api.conekta.io API.
 
+## DUMMY DEMO AVAILABLE IN
+
+ASP.Net MVC 5 Dummy demo for this library [here](https://github.com/davcs86/conekta-csharpnet-dummydemo)
+
 ## Installation
 
 Obtain the latest version of the Conekta C# bindings with:
 
     git clone https://github.com/davcs86/conekta-csharpnet
 
+OR
+
+Use the Nuget Package Manager Console
+
+    Install-Package ConektaClient
+
+## Usage
+
 To get started, add the following to your code:
 
     using ConektaCSharp;
 
-## Usage
+
 ```csharp    
 Conekta.ApiKey ="1tv5yJp3xnVZ7eK67m4h";
-JObject valid_payment_method;
-JObject valid_visa_card;
-valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
-valid_payment_method = JObject.Parse("{'description':'Stogies'," +
-"'reference_id':'9839-wolf_pack'," +
-"'amount':20000," +
-"'currency':'MXN'}");
-JObject _params = valid_payment_method;
-_params["card"] = valid_visa_card["card"];
+
+JObject valid_payment_method = JObject.Parse("{'description':'Stogies'," +
+                                             "'reference_id':'9839-wolf_pack'," +
+                                             "'amount':20000," +
+                                             "'currency':'MXN'," +
+                                             "'card':'tok_test_visa_4242'}");
+
 try
 {
     Charge charge = Charge.create(_params);
