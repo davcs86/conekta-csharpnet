@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Conekta4Net : C# Bindings for Conekta.io">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Conekta4Net</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/davcs86/conekta-csharpnet">View on GitHub</a>
+
+          <h1 id="project_title">Conekta4Net</h1>
+          <h2 id="project_tagline">C# Bindings for Conekta.io</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/davcs86/conekta-csharpnet/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/davcs86/conekta-csharpnet/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="conekta-c-107" class="anchor" href="#conekta-c-107" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conekta C# 1.0.7</h1>
+
+<p>This is an un-official C# library that allows interaction with <a href="https://api.conekta.io">https://api.conekta.io</a> API.</p>
+
+<h2>
+<a id="dummy-demo-available-in" class="anchor" href="#dummy-demo-available-in" aria-hidden="true"><span class="octicon octicon-link"></span></a>DUMMY DEMO AVAILABLE IN</h2>
+
+<p>ASP.Net MVC 5 Dummy demo for this library <a href="https://github.com/davcs86/conekta-csharpnet-dummydemo">here</a></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Obtain the latest version of the Conekta C# bindings with:</p>
+
+<pre><code>git clone https://github.com/davcs86/conekta-csharpnet
+</code></pre>
+
+<p>OR</p>
+
+<p>Use the Nuget Package Manager Console</p>
+
+<pre><code>Install-Package ConektaClient
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>To get started, add the following to your code:</p>
+
+<pre><code>using ConektaCSharp;
+</code></pre>
+
+<div class="highlight highlight-csharp"><pre>Conekta.ApiKey =<span class="pl-s"><span class="pl-pds">"</span>1tv5yJp3xnVZ7eK67m4h<span class="pl-pds">"</span></span>;
+
+JObject valid_payment_method = JObject.Parse(<span class="pl-s"><span class="pl-pds">"</span>{'description':'Stogies',<span class="pl-pds">"</span></span> +
+                                             <span class="pl-s"><span class="pl-pds">"</span>'reference_id':'9839-wolf_pack',<span class="pl-pds">"</span></span> +
+                                             <span class="pl-s"><span class="pl-pds">"</span>'amount':20000,<span class="pl-pds">"</span></span> +
+                                             <span class="pl-s"><span class="pl-pds">"</span>'currency':'MXN',<span class="pl-pds">"</span></span> +
+                                             <span class="pl-s"><span class="pl-pds">"</span>'card':'tok_test_visa_4242'}<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">try</span>
+{
+    Charge charge = Charge.create(_params);
+    Console.WriteLine(charge.ToString());
+}
+<span class="pl-k">catch</span> (Error e)
+{
+    Console.WriteLine(e.ToString());
+}
+
+<span class="pl-c">// Console.WriteLine(charge.ToString()); </span>
+
+{
+  <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>54f5e2f419ce8824a00086ce<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>livemode<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>created_at<span class="pl-pds">"</span></span>: <span class="pl-c1">1425400564</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>status<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>paid<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>currency<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>MXN<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Stogies<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>reference_id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>9839-wolf_pack<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>amount<span class="pl-pds">"</span></span>: <span class="pl-c1">20000</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>paid_at<span class="pl-pds">"</span></span>: <span class="pl-c1">1425400582</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>fee<span class="pl-pds">"</span></span>: <span class="pl-c1">963</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>payment_method<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Jorge Lopez<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>exp_month<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>12<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>exp_year<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>19<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>auth_code<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>000000<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>credit<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>last4<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>4242<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>brand<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>visa<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>details<span class="pl-pds">"</span></span>: {}
+}
+</pre></div>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>Please see <a href="https://www.conekta.io/docs/api">https://www.conekta.io/docs/api</a> for up-to-date documentation.</p>
+
+<h2>
+<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
+
+<p>The library has Unit Tests and you can run them separately.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Developed by <a href="mailto:davcs86@gmail.com">David Castillo</a>. Available with <a href="LICENSE">MIT License</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Conekta4Net maintained by <a href="https://github.com/davcs86">davcs86</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
