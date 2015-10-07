@@ -1,5 +1,9 @@
 # Conekta C# 1.0.7
 
+[![NuGet downloads](https://img.shields.io/nuget/dt/ConektaClient.svg)](https://www.nuget.org/packages/ConektaClient)
+
+[![Build Status](https://travis-ci.org/davcs86/conekta-csharpnet.svg)](https://travis-ci.org/davcs86/conekta-csharpnet)
+
 This is an un-official C# library that allows interaction with https://api.conekta.io API.
 
 ## DUMMY DEMO AVAILABLE IN
