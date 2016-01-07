@@ -34,12 +34,14 @@ namespace ConektaCSharp
     {
         private static String _apiKey;
         private static String _apiBase;
+        private static SecurityProtocolType _securityProtocol;
         protected HttpWebRequest Connection;
 
         public ConektaRequestor()
         {
             _apiKey = Conekta.ApiKey;
             _apiBase = Conekta.ApiBase;
+            _securityProtocol = Conekta.SecurityProtocol;
         }
 
         private static String ApiUrl(String url)
@@ -85,7 +87,7 @@ namespace ConektaCSharp
 
                 ServicePointManager.Expect100Continue = true;
 
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+                ServicePointManager.SecurityProtocol = _securityProtocol;
 
                 Connection = (HttpWebRequest) WebRequest.Create(apiURL);
 
