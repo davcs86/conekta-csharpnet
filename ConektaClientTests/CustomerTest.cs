@@ -1,11 +1,11 @@
 ﻿using System;
 using ConektaCSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharpTests
 {
-    [TestClass]
+    [TestFixture]
     public class CustomerTest
     {
         private readonly JObject valid_visa_card;
@@ -16,7 +16,7 @@ namespace ConektaCSharpTests
             valid_visa_card = JObject.Parse("{'name': 'test', 'cards':['tok_test_visa_4242']}");
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulCustomerFind()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -34,7 +34,7 @@ namespace ConektaCSharpTests
             return customer;
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulCustomerWhere()
         {
             var customers = Customer.where();
@@ -42,7 +42,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customers[0] is Customer);
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulDeleteCustomer()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -50,7 +50,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customer.deleted);
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulCustomerUpdate()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -59,7 +59,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customer.name.Equals("Logan"));
         }
 
-        [TestMethod]
+        [Test]
         public void testAddCardToCustomer()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -70,7 +70,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(((Card) customer.cards[1]).customer == customer);
         }
 
-        [TestMethod]
+        [Test]
         public void testDeleteCard()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -78,7 +78,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(((Card) customer.cards[0]).deleted);
         }
 
-        [TestMethod]
+        [Test]
         public void testUpdateCard()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -100,7 +100,7 @@ namespace ConektaCSharpTests
             return customer;
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulSubscriptionUpdate()
         {
             var customer = testSuccesfulSubscriptionCreate();
@@ -120,7 +120,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customer.subscription.plan_id.Equals(plan.id));
         }
 
-        [TestMethod]
+        [Test]
         public void testUnSuccesfulSubscriptionCreate()
         {
             var customer = testSuccesfulCustomerCreate();
@@ -136,7 +136,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulSubscriptionPause()
         {
             var customer = testSuccesfulSubscriptionCreate();
@@ -144,7 +144,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customer.subscription.status.Equals("paused"));
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulSubscriptionResume()
         {
             var customer = testSuccesfulSubscriptionCreate();
@@ -154,7 +154,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(customer.subscription.status.Equals("active"));
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulSubscriptionCancel()
         {
             var customer = testSuccesfulSubscriptionCreate();

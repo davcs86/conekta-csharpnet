@@ -1,6 +1,7 @@
 ﻿using System;
 using ConektaCSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using System.Net;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharpTests
@@ -8,7 +9,7 @@ namespace ConektaCSharpTests
     /// <summary>
     ///     Summary description for PlanTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class PlanTest
     {
         private readonly JObject _params;
@@ -24,7 +25,7 @@ namespace ConektaCSharpTests
                               "','name' : 'Gold Plan','amount' : 10000,'currency' : 'MXN','interval' : 'month','frequency' : 10,'trial_period_days' : 15,'expiry_count' : 12}");
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulPlanCreate()
         {
             var plans = Plan.where();
@@ -32,7 +33,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(plan.id.Equals("gold-plan" + id));
         }
 
-        [TestMethod]
+        [Test]
         public void testUpdatePlan()
         {
             var plans = Plan.where();
@@ -41,7 +42,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(plan.name.Equals("Silver Plan"));
         }
 
-        [TestMethod]
+        [Test]
         public void testDeletePlan()
         {
             var plans = Plan.where();

@@ -1,11 +1,11 @@
 ﻿using System;
 using ConektaCSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharpTests
 {
-    [TestClass]
+    [TestFixture]
     public class ChargeTest
     {
         private readonly JObject invalid_payment_method;
@@ -65,7 +65,7 @@ namespace ConektaCSharpTests
             return charge;
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulFindCharge()
         {
             var charge = testSuccesfulCardPMCreate();
@@ -73,7 +73,7 @@ namespace ConektaCSharpTests
             Assert.IsNotNull(charge);
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulWhere()
         {
             var charges = Charge.where();
@@ -81,7 +81,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(charges[0] is ConektaObject);
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulBankPMCreate()
         {
             var bank = JObject.Parse("{'bank':{'type':'banorte'}}");
@@ -92,7 +92,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(charge.status.Equals("pending_payment"));
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulSPEIPMCreate()
         {
             var bank = JObject.Parse("{'bank':{'type':'spei'}}");
@@ -104,7 +104,7 @@ namespace ConektaCSharpTests
             Assert.IsFalse(String.IsNullOrWhiteSpace(((SpeiPayment) charge.payment_method).clabe));
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulOxxoPMCreate()
         {
             var cash = JObject.Parse("{'cash':{'type':'oxxo'}}");
@@ -116,7 +116,7 @@ namespace ConektaCSharpTests
             Assert.IsFalse(String.IsNullOrWhiteSpace(((OxxoPayment) charge.payment_method).barcode));
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulRealTimePMCreate()
         {
             var cash = JObject.Parse("{'cash':{'type':'real_time'}}");
@@ -128,7 +128,7 @@ namespace ConektaCSharpTests
             Assert.IsFalse(String.IsNullOrWhiteSpace(((RealTimePayment) charge.payment_method).barcode));
         }
 
-        [TestMethod]
+        [Test]
         public void testUnsuccesfulPMCreate()
         {
             var _params = invalid_payment_method;
@@ -144,7 +144,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulRefund()
         {
             var charge = testSuccesfulCardPMCreate();
@@ -152,7 +152,7 @@ namespace ConektaCSharpTests
             Assert.IsTrue(charge.status.Equals("refunded"));
         }
 
-        [TestMethod]
+        [Test]
         public void testUnsuccesfulRefund()
         {
             var charge = testSuccesfulCardPMCreate();
@@ -166,7 +166,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulCapture()
         {
             var _params = valid_payment_method;

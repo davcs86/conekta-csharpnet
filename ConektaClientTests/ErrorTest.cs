@@ -1,10 +1,10 @@
 ﻿using ConektaCSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 
 namespace ConektaCSharpTests
 {
-    [TestClass]
+    [TestFixture]
     public class ErrorTest
     {
         private JObject valid_visa_card;
@@ -27,7 +27,7 @@ namespace ConektaCSharpTests
                                                  "'currency':'MXN'}");
         }
 
-        [TestMethod]
+        [Test]
         public void testNoIdError()
         {
             try
@@ -42,7 +42,7 @@ namespace ConektaCSharpTests
 
         /*
          * Conekta.ApiBase is a Constant value (can't be changed)
-        [TestMethod]
+        [Test]
         public void testNoConnectionError() {
             String _base = Conekta.ApiBase;
             Conekta.ApiBase = "http://localhost:3001";
@@ -56,7 +56,7 @@ namespace ConektaCSharpTests
          * 
          */
 
-        [TestMethod]
+        [Test]
         public void testApiError()
         {
             try
@@ -69,7 +69,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testAuthenticationError()
         {
             Conekta.ApiKey = "";
@@ -84,7 +84,7 @@ namespace ConektaCSharpTests
             Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
         }
 
-        [TestMethod]
+        [Test]
         public void testParameterValidationError()
         {
             valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
@@ -101,7 +101,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testProcessingError()
         {
             valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
@@ -121,7 +121,7 @@ namespace ConektaCSharpTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void testResourceNotFoundError()
         {
             try

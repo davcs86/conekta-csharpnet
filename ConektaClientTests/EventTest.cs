@@ -1,9 +1,9 @@
 ﻿using ConektaCSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ConektaCSharpTests
 {
-    [TestClass]
+    [TestFixture]
     public class EventTest
     {
         public EventTest()
@@ -11,7 +11,7 @@ namespace ConektaCSharpTests
             Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
         }
 
-        [TestMethod]
+        [Test]
         public void testSuccesfulWhere()
         {
             var events = Event.where();
