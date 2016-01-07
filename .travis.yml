@@ -2,7 +2,7 @@ language: csharp
 solution: conekta-csharpnet.sln
 install:
   - nuget restore conekta-csharpnet.sln
-  - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory testrunner
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release conekta-csharpnet.sln
-  - mono ./testrunner/NUnit.Runners.3.0.1/tools/nunit-console.exe ./ConektaClientTests/bin/Release/ConektaClientTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./ConektaClientTests/bin/Release/ConektaClientTests.dll
