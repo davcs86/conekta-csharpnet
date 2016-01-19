@@ -20,7 +20,6 @@ namespace ConektaCSharpTests
         {
             Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
             Conekta.SecurityProtocol = SecurityProtocolType.Tls;
-            var plans = Plan.where();
             id = (new Random()).Next(1000);
             _params =
                 JObject.Parse("{'id' : 'gold-plan" + id +

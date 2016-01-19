@@ -9,7 +9,6 @@ namespace ConektaCSharpTests
     public class CustomerTest
     {
         private readonly JObject valid_visa_card;
-
         public CustomerTest()
         {
 			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
@@ -94,11 +93,16 @@ namespace ConektaCSharpTests
         public Customer testSuccesfulSubscriptionCreate()
         {
             var customer = testSuccesfulCustomerCreate();
-            var _params = JObject.Parse("{'plan':'gold-plan'}");
+			var planId = (new Random()).Next(1000);
+			var _params =
+				JObject.Parse("{'id' : 'gold-plan" + planId +
+					"','name' : 'Gold Plan','amount' : 10000,'currency' : 'MXN','interval' : 'month','frequency' : 10,'trial_period_days' : 15,'expiry_count' : 12}");
+			var plan = Plan.create(_params);
+			_params = JObject.Parse("{'plan':'"+plan.id+"'}");
             customer.createSubscription(_params);
             Assert.IsNotNull(customer.subscription);
             Assert.IsTrue(customer.subscription.status.Equals("in_trial"));
-            Assert.IsTrue(customer.subscription.plan_id.Equals("gold-plan"));
+			Assert.IsTrue(customer.subscription.plan_id.Equals(plan.id));
             Assert.IsTrue(customer.subscription.card_id.Equals(customer.default_card_id));
             return customer;
         }
