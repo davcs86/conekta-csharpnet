@@ -1,10 +1,26 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ConektaCSharp.Tests\CustomerTest.cs">
+    <Files>
+      <File FileName="ConektaCSharp.Tests\ErrorTest.cs" Line="9" Column="5" />
+      <File FileName="ConektaCSharp.Tests\CustomerTest.cs" Line="10" Column="6" />
+    </Files>
     <Pads>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State name="__root__">
-          <Node />
+          <Node name="conekta-csharpnet" expanded="True">
+            <Node name="ConektaCSharp.Tests" expanded="True">
+              <Node name="ConektaCSharpTests" expanded="True">
+                <Node name="ChargeTest" expanded="True">
+                  <Node name="testSuccesfulBankPMCreate" selected="True" />
+                </Node>
+                <Node name="CustomerTest" expanded="True" />
+                <Node name="ErrorTest" expanded="True" />
+                <Node name="EventTest" expanded="True" />
+                <Node name="PlanTest" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
@@ -13,4 +29,5 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <AuthorInfo Name="David Castillo" Email="davcs86@gmail.com" Copyright="2015. David Castillo" Company="" Trademark="" />
 </Properties>
