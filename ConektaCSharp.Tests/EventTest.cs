@@ -6,9 +6,17 @@ namespace ConektaCSharpTests
     [TestFixture]
     public class EventTest
     {
+
+		public void setApiKey() {
+			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
+			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
+				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
+			Conekta.ApiKey = apiFromEnvironment;
+		}
+
         public EventTest()
         {
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+			setApiKey();
         }
 
         [Test]

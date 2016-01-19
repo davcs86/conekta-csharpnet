@@ -9,12 +9,17 @@ namespace ConektaCSharpTests
     public class CustomerTest
     {
         private readonly JObject valid_visa_card;
-        public CustomerTest()
-        {
+
+		public void setApiKey() {
 			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
 			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
 				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
 			Conekta.ApiKey = apiFromEnvironment;
+		}
+
+        public CustomerTest()
+        {
+			setApiKey();
             valid_visa_card = JObject.Parse("{'name': 'test', 'cards':['tok_test_visa_4242']}");
         }
 

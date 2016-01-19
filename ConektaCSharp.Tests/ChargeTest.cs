@@ -13,13 +13,16 @@ namespace ConektaCSharpTests
         private readonly JObject valid_payment_method;
         private readonly JObject valid_visa_card;
 
-        public ChargeTest()
-        {
+		public void setApiKey() {
 			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
 			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
 				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
 			Conekta.ApiKey = apiFromEnvironment;
-			Debug.WriteLine(Conekta.ApiKey);
+		}
+
+        public ChargeTest()
+        {
+			setApiKey();
             valid_payment_method = JObject.Parse("{'description':'Stogies'," +
                                                  "'reference_id':'9839-wolf_pack'," +
                                                  "'amount':20000," +

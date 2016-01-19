@@ -1,10 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ConektaCSharp.Tests\ChargeTest.cs">
+    <Files>
+      <File FileName="ConektaCSharp.Tests\ChargeTest.cs" Line="3" Column="7" />
+    </Files>
     <Pads>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State name="__root__">
-          <Node name="conekta-csharpnet" expanded="True" />
+          <Node name="conekta-csharpnet" expanded="True">
+            <Node name="ConektaCSharp.Tests" expanded="True">
+              <Node name="ConektaCSharpTests" expanded="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

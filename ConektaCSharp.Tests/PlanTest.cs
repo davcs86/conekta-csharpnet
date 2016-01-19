@@ -16,10 +16,16 @@ namespace ConektaCSharpTests
         private readonly int id;
 		private Plan plan;
 
+		public void setApiKey() {
+			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
+			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
+				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
+			Conekta.ApiKey = apiFromEnvironment;
+		}
+
         public PlanTest()
         {
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
-            Conekta.SecurityProtocol = SecurityProtocolType.Tls;
+			setApiKey();
             id = (new Random()).Next(1000);
             _params =
                 JObject.Parse("{'id' : 'gold-plan" + id +
