@@ -14,7 +14,7 @@ namespace ConektaCSharpTests
         private readonly JObject valid_payment_method;
 
 		public void setApiKey() {
-			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY", EnvironmentVariableTarget.Machine);
+			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
 			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
 				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
 			Conekta.ApiKey = apiFromEnvironment;
