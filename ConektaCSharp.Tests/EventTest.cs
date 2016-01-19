@@ -1,4 +1,5 @@
-﻿using ConektaCSharp;
+﻿using System;
+using ConektaCSharp;
 using NUnit.Framework;
 
 namespace ConektaCSharpTests

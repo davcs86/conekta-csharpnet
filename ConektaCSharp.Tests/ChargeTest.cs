@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using ConektaCSharp;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
