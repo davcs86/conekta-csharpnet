@@ -1,4 +1,5 @@
-﻿using ConektaCSharp;
+﻿using System;
+using ConektaCSharp;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 
@@ -12,9 +13,17 @@ namespace ConektaCSharpTests
         private readonly JObject invalid_visa_card;
         private readonly JObject valid_payment_method;
 
+		public void setApiKey() {
+			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY", EnvironmentVariableTarget.Machine);
+			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
+				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
+			Conekta.ApiKey = apiFromEnvironment;
+		}
+
         public ErrorTest()
         {
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+			setApiKey();
+
             valid_visa_card = JObject.Parse("{'name': 'test', 'cards':['tok_test_visa_4242']}");
             invalid_visa_card = JObject.Parse("{'name': 'test', 'cards':[{0:'tok_test_visa_4242'}]}");
             invalid_payment_method = JObject.Parse("{'description':'Stogies'," +
@@ -23,6 +32,19 @@ namespace ConektaCSharpTests
                                                    "'currency':'MXN'}");
             valid_payment_method = JObject.Parse("{'description':'Stogies'," +
                                                  "'reference_id':'9839-wolf_pack'," +
+												 "'details':{" +
+												 "   'name':'Wolverine', " +
+												 "   'email':'buyeremail@email.com', "+
+												 "   'line_items': [" +
+												 "            {" +
+												 "                'type': 'ecommerce_shopping'," +
+												 "                'quantity': 2," +
+												 "                'name': 'Bg Ss Shoshanna Yd Polo Dress'," +
+												 "                'description': 'Un vestido que podría ser definido como sporty- chic. De cuello blanco y líneas horizontales en varios colores, hace referencia a la vida en altamar.  '," +
+												 "                'sku': '7500244741187'," +
+												 "                'unit_price': 59000" +
+												 "            }]" +
+												 "}, " +
                                                  "'amount':20000," +
                                                  "'currency':'MXN'}");
         }
@@ -81,15 +103,14 @@ namespace ConektaCSharpTests
             {
                 Assert.IsTrue(e is AuthenticationError);
             }
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+			setApiKey();
         }
 
         [Test]
         public void testParameterValidationError()
         {
-            valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
-            var _params = invalid_payment_method;
-            _params["card"] = valid_visa_card["card"];
+			var _params = (JObject)invalid_payment_method.DeepClone();;
+			_params["card"] = JObject.Parse("{'card':'tok_test_visa_4242'}")["card"];
             try
             {
                 Charge.create(_params);
@@ -104,9 +125,8 @@ namespace ConektaCSharpTests
         [Test]
         public void testProcessingError()
         {
-            valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
-            var _params = valid_payment_method;
-            _params["card"] = valid_visa_card["card"];
+			var _params = (JObject)valid_payment_method.DeepClone();
+			_params["card"] = JObject.Parse("{'card':'tok_test_visa_4242'}")["card"];
             _params["capture"] = "false";
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.status.Equals("pre_authorized"));
@@ -115,7 +135,7 @@ namespace ConektaCSharpTests
             {
                 charge.refund();
             }
-            catch (ProcessingError e)
+			catch (Exception e)
             {
                 Assert.IsTrue(e is ProcessingError);
             }

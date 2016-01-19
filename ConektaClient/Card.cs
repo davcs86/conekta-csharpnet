@@ -30,7 +30,7 @@ namespace ConektaCSharp
             return _base + "/cards/" + id;
         }
 
-        public void update(JObject _params)
+        public new void update(JObject _params)
         {
             base.update(_params);
         }

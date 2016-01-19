@@ -14,13 +14,17 @@ namespace ConektaCSharpTests
 
         public ChargeTest()
         {
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+			string apiFromEnvironment = System.Environment.GetEnvironmentVariable("CONEKTA_APIKEY", EnvironmentVariableTarget.Machine);
+			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
+				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
+			Conekta.ApiKey = apiFromEnvironment;
             valid_payment_method = JObject.Parse("{'description':'Stogies'," +
                                                  "'reference_id':'9839-wolf_pack'," +
                                                  "'amount':20000," +
                                                  "'currency':'MXN'," +
                                                  "'details':{" +
                                                  "   'name':'Wolverine', " +
+												 "   'email':'buyeremail@email.com', "+
                                                  "   'billing_address': {" +
                                                  "       'street1':'tamesis'" +
                                                  "   }, " +
@@ -50,11 +54,18 @@ namespace ConektaCSharpTests
             valid_visa_card = JObject.Parse("{'card':'tok_test_visa_4242'}");
         }
 
-        public Charge testSuccesfulCardPMCreate()
+		private Charge CardPMCreate(){
+			var _params = (JObject)valid_payment_method.DeepClone();
+			_params.Remove("bank");
+			_params["card"] = valid_visa_card.GetValue("card");
+			var charge = Charge.create(_params);
+			return charge;	
+		}
+
+		[Test]
+        public void testSuccesfulCardPMCreate()
         {
-            var _params = valid_payment_method;
-            _params["card"] = valid_visa_card.GetValue("card");
-            var charge = Charge.create(_params);
+			var charge = CardPMCreate();
             Assert.IsTrue(charge.status.Equals("paid"));
             Assert.IsNotNull(charge.details);
             Assert.IsNotNull(charge.details.billing_address);
@@ -62,13 +73,14 @@ namespace ConektaCSharpTests
             Assert.IsTrue(charge.details.line_items[0] is LineItems);
             Assert.IsTrue(charge.details.name.Equals("Wolverine"));
             Assert.IsTrue(charge.payment_method is CardPayment);
-            return charge;
+            
         }
 
-        [Test]
+		/*
+		[Test]
         public void testSuccesfulFindCharge()
         {
-            var charge = testSuccesfulCardPMCreate();
+			var charge = CardPMCreate();
             charge = Charge.find(charge.id);
             Assert.IsNotNull(charge);
         }
@@ -79,13 +91,13 @@ namespace ConektaCSharpTests
             var charges = Charge.where();
             Assert.IsNotNull(charges);
             Assert.IsTrue(charges[0] is ConektaObject);
-        }
+        }*/
 
         [Test]
         public void testSuccesfulBankPMCreate()
         {
             var bank = JObject.Parse("{'bank':{'type':'banorte'}}");
-            var _params = valid_payment_method;
+			var _params = (JObject)valid_payment_method.DeepClone();
             _params["bank"] = bank["bank"];
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.payment_method is BankTransferPayment);
@@ -96,7 +108,7 @@ namespace ConektaCSharpTests
         public void testSuccesfulSPEIPMCreate()
         {
             var bank = JObject.Parse("{'bank':{'type':'spei'}}");
-            var _params = valid_payment_method;
+			var _params = (JObject)valid_payment_method.DeepClone();
             _params["bank"] = bank["bank"];
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.payment_method is SpeiPayment);
@@ -108,7 +120,7 @@ namespace ConektaCSharpTests
         public void testSuccesfulOxxoPMCreate()
         {
             var cash = JObject.Parse("{'cash':{'type':'oxxo'}}");
-            var _params = valid_payment_method;
+			var _params = (JObject)valid_payment_method.DeepClone();
             _params["cash"] = cash["cash"];
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.payment_method is OxxoPayment, "Pago");
@@ -116,22 +128,24 @@ namespace ConektaCSharpTests
             Assert.IsFalse(String.IsNullOrWhiteSpace(((OxxoPayment) charge.payment_method).barcode));
         }
 
+		/*
+		 * Real-time was removed from Conekta.io API
         [Test]
         public void testSuccesfulRealTimePMCreate()
         {
             var cash = JObject.Parse("{'cash':{'type':'real_time'}}");
-            var _params = valid_payment_method;
+			var _params = (JObject)valid_payment_method.DeepClone();
             _params["cash"] = cash["cash"];
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.payment_method is RealTimePayment);
             Assert.IsTrue(charge.status.Equals("pending_payment"));
             Assert.IsFalse(String.IsNullOrWhiteSpace(((RealTimePayment) charge.payment_method).barcode));
-        }
+        }*/
 
         [Test]
         public void testUnsuccesfulPMCreate()
         {
-            var _params = invalid_payment_method;
+			var _params = (JObject)invalid_payment_method.DeepClone();
             _params["card"] = valid_visa_card["card"];
             try
             {
@@ -147,7 +161,7 @@ namespace ConektaCSharpTests
         [Test]
         public void testSuccesfulRefund()
         {
-            var charge = testSuccesfulCardPMCreate();
+			var charge = CardPMCreate();
             charge.refund(20000);
             Assert.IsTrue(charge.status.Equals("refunded"));
         }
@@ -155,7 +169,7 @@ namespace ConektaCSharpTests
         [Test]
         public void testUnsuccesfulRefund()
         {
-            var charge = testSuccesfulCardPMCreate();
+			var charge = CardPMCreate();
             try
             {
                 charge.refund(30000);
@@ -169,8 +183,9 @@ namespace ConektaCSharpTests
         [Test]
         public void testSuccesfulCapture()
         {
-            var _params = valid_payment_method;
-            _params["card"] = valid_visa_card["card"];
+			var _params = (JObject)valid_payment_method.DeepClone();
+			_params.Remove("bank");
+			_params["card"] = (JValue)valid_visa_card["card"].DeepClone();
             _params["capture"] = "false";
             var charge = Charge.create(_params);
             Assert.IsTrue(charge.status.Equals("pre_authorized"));

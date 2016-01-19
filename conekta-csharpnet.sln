@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConektaCSharp", "ConektaClient\ConektaCSharp.csproj", "{FE03EFED-F93D-4470-9FBA-C67AADB99742}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConektaCSharpTests", "ConektaClientTests\ConektaCSharpTests.csproj", "{1CB0231B-2390-49D2-B8C3-CB21D0BBA9BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3F3A0E44-853D-4D12-B52C-75404D91A335}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,20 +13,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3F3A0E
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConektaCSharp.Tests", "ConektaCSharp.Tests\ConektaCSharp.Tests.csproj", "{3255EA5F-D613-4BAD-BA73-597B86B69763}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3255EA5F-D613-4BAD-BA73-597B86B69763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3255EA5F-D613-4BAD-BA73-597B86B69763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3255EA5F-D613-4BAD-BA73-597B86B69763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3255EA5F-D613-4BAD-BA73-597B86B69763}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE03EFED-F93D-4470-9FBA-C67AADB99742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE03EFED-F93D-4470-9FBA-C67AADB99742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE03EFED-F93D-4470-9FBA-C67AADB99742}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE03EFED-F93D-4470-9FBA-C67AADB99742}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CB0231B-2390-49D2-B8C3-CB21D0BBA9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CB0231B-2390-49D2-B8C3-CB21D0BBA9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CB0231B-2390-49D2-B8C3-CB21D0BBA9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CB0231B-2390-49D2-B8C3-CB21D0BBA9BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

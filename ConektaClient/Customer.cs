@@ -75,7 +75,7 @@ namespace ConektaCSharp
             delete(null, null);
         }
 
-        public void update(JObject _params)
+        public new void update(JObject _params)
         {
             base.update(_params);
         }

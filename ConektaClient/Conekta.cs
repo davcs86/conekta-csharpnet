@@ -9,7 +9,7 @@ namespace ConektaCSharp
         public const String Version = "1.0.7";
         public const String ApiBase = "https://api.conekta.io";
         public static string ApiKey { get; set; }
-        private static SecurityProtocolType _securityProtocol = SecurityProtocolType.Ssl3;
+        private static SecurityProtocolType _securityProtocol = SecurityProtocolType.Tls;
         public static SecurityProtocolType SecurityProtocol
         {
             get { return _securityProtocol; }

@@ -12,7 +12,10 @@ namespace ConektaCSharpTests
 
         public CustomerTest()
         {
-            Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+			string apiFromEnvironment = Environment.GetEnvironmentVariable("CONEKTA_APIKEY");
+			if (string.IsNullOrWhiteSpace(apiFromEnvironment))
+				apiFromEnvironment = "key_eYvWV7gSDkNYXsmr"; // use your public key
+			Conekta.ApiKey = apiFromEnvironment;
             valid_visa_card = JObject.Parse("{'name': 'test', 'cards':['tok_test_visa_4242']}");
         }
 
@@ -109,7 +112,7 @@ namespace ConektaCSharpTests
             {
                 plan = Plan.find("gold-plan2");
             }
-            catch (Exception e)
+            catch
             {
                 var _params =
                     JObject.Parse(
@@ -148,10 +151,11 @@ namespace ConektaCSharpTests
         public void testSuccesfulSubscriptionResume()
         {
             var customer = testSuccesfulSubscriptionCreate();
+			var initialStatus = customer.subscription.status;
             customer.subscription.pause();
             Assert.IsTrue(customer.subscription.status.Equals("paused"));
             customer.subscription.resume();
-            Assert.IsTrue(customer.subscription.status.Equals("active"));
+			Assert.IsTrue(customer.subscription.status.Equals(initialStatus));
         }
 
         [Test]

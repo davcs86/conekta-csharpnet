@@ -38,7 +38,7 @@ namespace ConektaCSharp
                 {
                     message = response["message"].ToString();
                 }
-                catch (Exception ex)
+                catch 
                 {
                     // ignored
                 }
@@ -49,7 +49,7 @@ namespace ConektaCSharp
                 {
                     type = response["type"].ToString();
                 }
-                catch (Exception ex)
+                catch
                 {
                     // ignored
                 }
@@ -60,7 +60,7 @@ namespace ConektaCSharp
                 {
                     __params = response["param"].ToString();
                 }
-                catch (Exception ex)
+                catch
                 {
                     // ignored
                 }

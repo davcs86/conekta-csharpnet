@@ -14,10 +14,12 @@ namespace ConektaCSharpTests
     {
         private readonly JObject _params;
         private readonly int id;
+		private Plan plan;
 
         public PlanTest()
         {
             Conekta.ApiKey = "key_eYvWV7gSDkNYXsmr";
+            Conekta.SecurityProtocol = SecurityProtocolType.Tls;
             var plans = Plan.where();
             id = (new Random()).Next(1000);
             _params =
@@ -25,28 +27,23 @@ namespace ConektaCSharpTests
                               "','name' : 'Gold Plan','amount' : 10000,'currency' : 'MXN','interval' : 'month','frequency' : 10,'trial_period_days' : 15,'expiry_count' : 12}");
         }
 
-        [Test]
-        public void testSuccesfulPlanCreate()
+		[Test]
+        public void testCreatePlan()
         {
-            var plans = Plan.where();
-            var plan = Plan.create(_params);
+            plan = Plan.create(_params);
             Assert.IsTrue(plan.id.Equals("gold-plan" + id));
         }
 
         [Test]
-        public void testUpdatePlan()
+        public void testModifyPlan()
         {
-            var plans = Plan.where();
-            var plan = Plan.create(_params);
             plan.update(JObject.Parse("{'name':'Silver Plan'}"));
             Assert.IsTrue(plan.name.Equals("Silver Plan"));
         }
 
         [Test]
-        public void testDeletePlan()
+        public void testRemovePlan()
         {
-            var plans = Plan.where();
-            var plan = Plan.create(_params);
             plan.delete();
             Assert.IsTrue(plan.deleted);
         }
