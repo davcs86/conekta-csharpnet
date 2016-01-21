@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/davcs86/conekta-csharpnet.svg)](https://travis-ci.org/davcs86/conekta-csharpnet)
 
+[![Coverage Status](https://coveralls.io/repos/github/davcs86/conekta-csharpnet/badge.svg?branch=master)](https://coveralls.io/github/davcs86/conekta-csharpnet?branch=master)
+
 This is an un-official C# library that allows interaction with https://api.conekta.io API.
 
 ## DUMMY DEMO AVAILABLE IN
@@ -48,7 +50,7 @@ catch (Error e)
     Console.WriteLine(e.ToString());
 }
 
-// Console.WriteLine(charge.ToString()); 
+// Console.WriteLine(charge.ToString());
 
 {
   "id": "54f5e2f419ce8824a00086ce",
