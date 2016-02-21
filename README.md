@@ -1,12 +1,22 @@
-# Conekta C# 1.0.7
+# Conekta .Net C# client v 1.0.7
 
 [![NuGet downloads](https://img.shields.io/nuget/dt/ConektaClient.svg)](https://www.nuget.org/packages/ConektaClient)
 
 [![Build Status](https://travis-ci.org/davcs86/conekta-csharpnet.svg)](https://travis-ci.org/davcs86/conekta-csharpnet)
 
-[![Coverage Status](https://coveralls.io/repos/github/davcs86/conekta-csharpnet/badge.svg?branch=master)](https://coveralls.io/github/davcs86/conekta-csharpnet?branch=master)
+This is an un-official C# library that allows interaction with https://api.conekta.io API. This project is **Mono/.Net40 compatible**.
 
-This is an un-official C# library that allows interaction with https://api.conekta.io API.
+### Bugfix for SSL error
+
+
+Change the [security protocol](https://msdn.microsoft.com/en-us/library/system.net.securityprotocoltype(v=vs.100).aspx) to TLS with
+
+
+```
+    Conekta.SecurityProtocol =  Conekta.SecurityProtocolType.Tls;
+
+```
+
 
 ## DUMMY DEMO AVAILABLE IN
 
