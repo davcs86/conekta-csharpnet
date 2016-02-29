@@ -12,8 +12,8 @@ This is an un-official C# library that allows interaction with https://api.conek
 Change the [security protocol](https://msdn.microsoft.com/en-us/library/system.net.securityprotocoltype(v=vs.100).aspx) to TLS with
 
 
-```
-    Conekta.SecurityProtocol =  Conekta.SecurityProtocolType.Tls;
+```csharp
+Conekta.SecurityProtocol =  Conekta.SecurityProtocolType.Tls;
 
 ```
 
@@ -30,7 +30,7 @@ Obtain the latest version of the Conekta C# bindings with:
 
 OR
 
-Use the Nuget Package Manager Console
+Use the **Nuget Package** Manager Console
 
     Install-Package ConektaClient
 
