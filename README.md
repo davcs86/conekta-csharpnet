@@ -1,6 +1,6 @@
 # Conekta .Net C# client v 1.0.7
 
-[![NuGet downloads](https://img.shields.io/nuget/dt/ConektaClient.svg)](https://www.nuget.org/packages/ConektaClient)
+[![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/ConektaClient/)
 
 [![Build Status](https://travis-ci.org/davcs86/conekta-csharpnet.svg)](https://travis-ci.org/davcs86/conekta-csharpnet)
 
